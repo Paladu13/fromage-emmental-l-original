@@ -603,12 +603,50 @@
     });
   }
 
-  // Initialisation : charger la config, puis lancer
+  // Initialisation : charger la config, puis démarrer le chrono
+  // Sur HTTPS (Render), l'autoplay audio est bloqué. On crée un bouton
+  // "Activer le son" qui débloque l'audio au premier clic.
+  function createAudioUnlockButton() {
+    var unlockBtn = document.createElement('div');
+    unlockBtn.id = 'audio-unlock-overlay';
+    unlockBtn.innerHTML =
+      '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;width:100%;height:100%;background:rgba(0,0,0,0.85);color:#fff;text-align:center;cursor:pointer;">' +
+      '<svg viewBox="0 0 80 80" fill="none" style="width:3.5rem;height:3.5rem;">' +
+      '<circle cx="40" cy="40" r="36" stroke="#C8860A" stroke-width="3" fill="none"/>' +
+      '<polygon points="32 24 60 40 32 56" fill="#C8860A"/>' +
+      '</svg>' +
+      '<div style="font-family:Playfair Display,serif;font-size:clamp(1.3rem,4vw,2rem);font-weight:600;">Cliquez pour activer le son</div>' +
+      '<div style="font-family:Inter,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.5);max-width:20rem;line-height:1.5;">La musique d\'ambiance sera lancée après un clic (le chrono est déjà en route)</div>' +
+      '</div>';
+    Object.assign(unlockBtn.style, {
+      position: 'fixed', inset: '0', zIndex: '99999',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      cursor: 'pointer',
+    });
+    document.body.appendChild(unlockBtn);
+
+    return new Promise(function(resolve) {
+      unlockBtn.addEventListener('click', function() {
+        unlockBtn.remove();
+        resolve();
+      });
+      unlockBtn.addEventListener('touchstart', function() {
+        unlockBtn.remove();
+        resolve();
+      });
+    });
+  }
+
   loadConfig(function() {
     remainingSeconds = timerSeconds;
     updateChronoDisplay();
-    loadChillMusic();
-    startTimer();
+    startTimer(); // Le chrono démarre tout de suite !
+
+    // L'overlay de déblocage audio est au-dessus de tout (z-index plus haut que le chrono)
+    // La musique chill ne part qu'après le clic
+    createAudioUnlockButton().then(function() {
+      loadChillMusic();
+    });
   });
 })();
 
