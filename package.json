@@ -1,0 +1,10 @@
+{
+  "name": "emmental-froameg-website",
+  "version": "1.0.0",
+  "description": "Site vitrine Emmental L'Original - déploiement Render",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT"
+}
