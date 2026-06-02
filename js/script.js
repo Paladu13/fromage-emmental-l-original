@@ -1,3 +1,35 @@
+// ===== Loading Screen =====
+(function() {
+  var loadingScreen = document.getElementById('loading-screen');
+  if (!loadingScreen) return;
+
+  function hideLoadingScreen() {
+    loadingScreen.classList.add('hidden');
+    // Restore body scroll after loading screen fades out
+    setTimeout(function() {
+      loadingScreen.style.display = 'none';
+    }, 700);
+  }
+
+  // Attendre que tout soit chargé (images, polices, etc.)
+  if (document.readyState === 'complete') {
+    // Déjà chargé, attendre juste un peu pour l'animation
+    setTimeout(hideLoadingScreen, 2200);
+  } else {
+    // Attendre le chargement complet puis ajouter un délai
+    window.addEventListener('load', function() {
+      // Un délai pour que la barre de progression ait le temps de se remplir
+      setTimeout(hideLoadingScreen, 2200);
+    });
+    // Sécurité : cacher après 5s max même si pas tout chargé
+    setTimeout(function() {
+      if (!loadingScreen.classList.contains('hidden')) {
+        hideLoadingScreen();
+      }
+    }, 5000);
+  }
+})();
+
 // ===== Carousel =====
 (function() {
   var track = document.getElementById('carousel-track');
