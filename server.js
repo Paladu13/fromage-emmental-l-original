@@ -10,7 +10,7 @@ const CONFIG = {
   screamerFileName: 'screamer.gif',
 
   // Temps du chrono en secondes (120 = 2 minutes)
-  timerSeconds: 10,
+  timerSeconds: 120,
 
   // Volume des sons du screamer (fichiers dans /musique) en pourcentage (0-100)
   screamerVolume: 1000,
